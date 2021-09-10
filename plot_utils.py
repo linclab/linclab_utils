@@ -13,13 +13,12 @@ Requirements:
 Contents:
 - LINCLAB_COLS          : module-wide dictionary of LiNCLab colors
 - linclab_plt_defaults(): sets plotting parameters to use LiNCLab colors and 
-			   to improve figure better readability.
+			              to improve figure better readability.
                           Call it before you start plotting. 
                           NOTE: This just updates the defaults. You can still use 
                           custom plotting settings in your scripts. 
-- linclab_colormap()    : returns a r-color LincLab color-based pyplot 
-                          colormap.
-- set_font()           : sets matplotlib font to preferred font/font family.
+- linclab_colormap()    : returns a 3-color pyplot colormap using LiNCLab colors.
+- set_font()            : sets matplotlib font to preferred font/font family.
 - help_logging()        : prints information on using the python `logging` module.
 """
 
@@ -81,14 +80,14 @@ def linclab_plt_defaults(font="Liberation Sans", fontdir=None,
     col_cyc = plt.cycler(color=colors, **cyc_args)
 
     # set pyplot params
-    params = {"axes.labelsize"       : "xx-large", # xx-large axis labels
+    params = {"axes.labelsize"       : "x-large",  # x-large axis labels
               "axes.linewidth"       : 1.5,        # thicker axis lines
               "axes.prop_cycle"      : col_cyc,    # line color cycle
               "axes.spines.right"    : False,      # no axis spine on right
               "axes.spines.top"      : False,      # no axis spine at top
               "axes.titlesize"       : "x-large",  # x-large axis title
               "errorbar.capsize"     : 4,          # errorbar cap length
-              "figure.titlesize"     : "x-large",  # x-large figure title
+              "figure.titlesize"     : "xx-large", # xx-large figure title
               "figure.autolayout"    : True,       # adjusts layout
               "font.size"            : 12,         # basic font size value
               "legend.fontsize"      : "x-large",  # x-large legend text
