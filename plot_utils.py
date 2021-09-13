@@ -17,7 +17,7 @@ Contents:
                           Call it before you start plotting. 
                           NOTE: This just updates the defaults. You can still use 
                           custom plotting settings in your scripts. 
-- linclab_colormap()    : returns a 3-color pyplot colormap using LiNCLab colors.
+- linclab_colormap()    : returns a 2 or 3-color pyplot colormap using LiNCLab colors.
 - set_font()            : sets matplotlib font to preferred font/font family.
 - help_logging()        : prints information on using the python `logging` module.
 """
@@ -141,7 +141,7 @@ def linclab_plt_defaults(font="Liberation Sans", fontdir=None,
 
 
 #############################################
-def linclab_colormap(nbins=100, gamma=1.0):
+def linclab_colormap(nbins=100, gamma=1.0, no_white=False):
     """
     linclab_colormap()
 
@@ -149,16 +149,23 @@ def linclab_colormap(nbins=100, gamma=1.0):
     red.
 
     Optional args:
-        - nbins (int): number of bins to use to create colormap
-                       default: 100
-        - gamma (num): non-linearity
-                       default: 1.0
+        - nbins (int)    : number of bins to use to create colormap
+                           default: 100
+        - gamma (num)    : non-linearity
+                           default: 1.0
+        - no_white (bool): if True, white as the intermediate color is omitted 
+                           from the colormap.
+                           default: False
 
     Returns:
         - cmap (colormap): a matplotlib colormap
     """
 
     colors = [LINCLAB_COLS["blue"], "#ffffff", LINCLAB_COLS["red"]]
+    name = "linclab_bwr"
+    if no_white:
+        colors = [colors[0], colors[-1]]
+        name = "linclab_br"
 
     # convert to RGB
     rgb_col = [[] for _ in range(len(colors))]
@@ -168,7 +175,7 @@ def linclab_colormap(nbins=100, gamma=1.0):
             rgb_col[c].append(ch_val)
 
     cmap = mpl.colors.LinearSegmentedColormap.from_list(
-        "linclab_bwr", rgb_col, N=nbins, gamma=gamma)
+        name, rgb_col, N=nbins, gamma=gamma)
 
     return cmap
 
