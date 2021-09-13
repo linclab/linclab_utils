@@ -19,6 +19,7 @@ This repository contains LiNCLab utilities, i.e. code that is useful across proj
 - If you wish to make personalized tweaks, don't hesitate to create your own branch or fork the repository.  
 &nbsp;
 
+
 ## Modules
 ### `plot_utils`: Utilities for setting LiNCLab style `matplotlib` plotting parameters.
 - `LINCLAB_COLS`: module-wide dictionary of LiNCLab colors.
@@ -26,3 +27,11 @@ This repository contains LiNCLab utilities, i.e. code that is useful across proj
  - `linclab_colormap()`: returns a 3-color colormap using LiNCLab colors.
  - `set_font()`: sets matplotlib font to preferred font/font family.
  - `help_logging()`: prints information on using the python `logging` module (which is used in this module).
+&nbsp;
+
+
+ ## Plotting and analysis tips notebook
+|   | Run | View |
+| - | --- | ---- |
+| Tutorial | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/linclab/linclab_utils/blob/main/plotting_tips.ipynb) | [![View the notebook](https://img.shields.io/badge/render-nbviewer-orange.svg)](https://nbviewer.jupyter.org/github/linclab/linclab_utils/blob/main/plotting_tips.ipynb?flush_cache=true) | 
+
