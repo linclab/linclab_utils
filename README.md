@@ -7,15 +7,21 @@ This repository contains LiNCLab utilities, i.e. code that is useful across proj
 ## Installation
 - Code is written in `python 3`.
 - Requirements are listed under `requirements.txt`.  
-- If desired, install using `setup.py`, by running `pip install [-e] .` 
-- Alternatively, use modules locally.  
+- To use a **local, editable version**, you can download the repository, and either:
+    - install from `setup.py`, by running `pip install -e .`  
+    or
+    - use the module locally.
+- To use a **fixed version**, you can either:
+    - install with `pip install git+https://github.com/linclab/linclab_utils.git`  
+    or
+    - download the repository and install from `setup.py`, by running `pip install .`
 &nbsp;
 
 
 ## Contributions
-- Team members are free to contribute to the utilities.  
+- Team members are encouraged to contribute to the utilities.  
 - Extensions and bug fixes are encouraged, though maintaining backwards compatibility is best, when possible.
-- Please document any code you add, and update `requirements.txt` if needed.
+- Please document any code you add, and update `requirements.txt`, if needed.
 - If you wish to make personalized tweaks, don't hesitate to create your own branch or fork the repository.  
 &nbsp;
 
