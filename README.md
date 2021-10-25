@@ -11,7 +11,7 @@ This repository contains LiNCLab utilities, i.e. code that is useful across proj
     - install from `setup.py`, by running `pip install -e .`  
     or
     - use the module locally.
-- To use a **fixed version**, you can either:
+- To use a **stable version**, you can either:
     - install with `pip install git+https://github.com/linclab/linclab_utils.git`  
     or
     - download the repository and install from `setup.py`, by running `pip install .`
