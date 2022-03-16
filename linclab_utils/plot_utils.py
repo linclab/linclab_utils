@@ -3,7 +3,7 @@ plot_utils.py
 
 Authors: Colleen Gillon
 
-Updated: October 2020
+Updated: March 2022
 
 Requirements: 
 - python (tested on 3.7)
@@ -18,12 +18,13 @@ Contents:
                           NOTE: This just updates the defaults. You can still use 
                           custom plotting settings in your scripts. 
 - linclab_colormap()    : returns a 2 or 3-color pyplot colormap using LiNCLab colors.
+- update_font_manager() : updates mpl font manager with fonts from a directory.
 - set_font()            : sets matplotlib font to preferred font/font family.
 - help_logging()        : prints information on using the python `logging` module.
 """
 
 import logging
-import os
+from pathlib import Path
 import warnings
 
 import matplotlib as mpl
@@ -117,23 +118,25 @@ def linclab_plt_defaults(font="Liberation Sans", fontdir=None,
         fig, ax = plt.subplots(figsize=[8, 8])
         
         n_col = len(colors)
-        x = np.asarray(list(range(10)))[:, np.newaxis]
-        y = np.repeat(x / 2., n_col, axis=1) - \
-            np.asarray(list(range(-n_col, 0)))[np.newaxis, :]
+        x = np.arange(10)[:, np.newaxis]
+        y = np.repeat(x / 2., n_col, axis=1) - np.arange(-n_col, 0)
         ax.plot(x, y)
-        labels = [f"{name}: {code}" 
-            for name, code in zip(col_order, colors)]
-        ax.legend(labels)
+
+        # label plot
+        legend_labels = [
+            f"{name}: {code}" for name, code in zip(col_order, colors)
+            ]
+        ax.legend(legend_labels)
         ax.set_xlabel("X axis")
         ax.set_ylabel("Y axis")
-        ax.set_title("Example plot")
+        ax.set_title("Example plot", y=1.02)
         ax.axvline(x=1, ls="dashed", c="k")
-        
-        if len(dirname) and not os.path.exists(dirname):
-            os.makedirs(dirname)
+    
+        dirname = Path(dirname)
+        dirname.mkdir(parents=True, exist_ok=True)
         
         ext = plt.rcParams["savefig.format"]
-        savepath = os.path.join(dirname, f"example_plot.{ext}")
+        savepath = dirname.joinpath(f"example_plot").with_suffix(f".{ext}")
         fig.savefig(savepath)
 
         logger.info(f"Example saved under {savepath}")
@@ -181,6 +184,32 @@ def linclab_colormap(nbins=100, gamma=1.0, no_white=False):
 
 
 #############################################
+def update_font_manager(fontdir):
+    """
+    update_font_manager(fontdir)
+
+    Adds fonts from a font directory to the font manager.
+    
+    Required args:
+        - fontdir (Path): directory to where extra fonts (.ttf) are stored
+    """
+
+    fontdir = Path(fontdir)
+    if not fontdir.exists():
+        raise OSError(f"{fontdir} font directory does not exist.")
+
+    # add new fonts to list of available fonts if a font directory is provided
+    fontdirs = [fontdir, ]
+    # prevent a long stream of debug messages
+    logging.getLogger("matplotlib.font_manager").disabled = True
+    font_files = fm.findSystemFonts(fontpaths=fontdirs)
+    for font_file in font_files:
+        fm.fontManager.addfont(font_file)
+
+    return
+
+
+#############################################
 def set_font(font="Liberation Sans", fontdir=None, log_fonts=False):
     """
     set_font()
@@ -202,31 +231,13 @@ def set_font(font="Liberation Sans", fontdir=None, log_fonts=False):
                               default: False
     """
 
-    if fontdir is not None and len(fontdir) and not os.path.exists(fontdir):
-        raise OSError(f"{fontdir} font directory does not exist.")
-
     # keep in lower case
     font_families = ["cursive", "family", "fantasy", "monospace", 
         "sans-serif", "serif"]
 
-    # add new fonts to list of available fonts if a font directory is provided
-    # (this bit of code is not compatible with earlier versions of matplotlib)
-    try:
-        if fontdir and os.path.exists(fontdir):
-            fontdirs = [fontdir, ]
-            # prevent a long stream of debug messages
-            logging.getLogger("matplotlib.font_manager").disabled = True
-            font_files = fm.findSystemFonts(fontpaths=fontdirs)
-            for font_file in font_files:
-                fm.fontManager.addfont(font_file)
-    except AttributeError as err:
-        if str(err) == "'FontManager' object has no attribute 'addfont'":
-            warnings.warn("Cannot add fonts from font directory, as this function is "
-                f"not compatible with matplotlib version {mpl.__version__}. It "
-                "should be compatible with matplotlib versions >= 3.3.1.")
-        else:
-            raise err
-
+    if fontdir is not None:
+        update_font_manager(fontdir)
+    
     # compile list of available fonts/font families 
     # (includes checking each font family to see if any of its fonts are available)
     all_fonts = list(set([f.name for f in fm.fontManager.ttflist]))
@@ -248,9 +259,10 @@ def set_font(font="Liberation Sans", fontdir=None, log_fonts=False):
         for i, (font_type, font_list) in enumerate(zip(
             ["Font families", "Available fonts"], [font_families, all_fonts])):
             sep = "" if i == 0 else "\n\n"
-            sorted_fonts_str = f"\n    ".join(sorted(font_list))
+            sorted_fonts_str = f"\n{TAB}".join(sorted(font_list))
             font_log = (f"{font_log}{sep}{font_type}:"
-                f"\n    {sorted_fonts_str}")
+                f"\n{TAB}{sorted_fonts_str}")
+        
         logger.info(font_log)
     
     # compile ordered list of available fonts/font families, in the preferred 
@@ -258,6 +270,7 @@ def set_font(font="Liberation Sans", fontdir=None, log_fonts=False):
     fonts = font
     if not isinstance(fonts, list):
         fonts = [fonts]
+
     params = {
         "font.family": plt.rcParams["font.family"]
     }
@@ -294,12 +307,12 @@ def set_font(font="Liberation Sans", fontdir=None, log_fonts=False):
             if selected in font_families:
                 selected_str = selected_str.replace(".", " family.")
         warnings.warn(f"Requested font(s) not found: {omitted_str}."
-            f"{selected_str}")
+            f"{selected_str}", category=UserWarning, stacklevel=1)
     
     plt.rcParams.update(params)
-    
+
     return
-    
+
 
 #############################################
 def help_logging():

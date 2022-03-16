@@ -1,4 +1,6 @@
 /*/
 
+!/linclab_utils/
+
 *.pyc
 *.swp

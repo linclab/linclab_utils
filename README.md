@@ -32,6 +32,7 @@ This repository contains LiNCLab utilities, i.e. code that is useful across proj
 - `linclab_plt_default()`: sets plotting parameters to use LiNCLab colors and to improve figure better readability. Call it before you start plotting. (NOTE: It just updates the defaults. You can still use custom plotting settings in your scripts.)
  - `linclab_colormap()`: returns a 2 or 3-color colormap using LiNCLab colors.
  - `set_font()`: sets matplotlib font to preferred font/font family.
+ - `update_font_manager()`: updates matplotlib font manager with fonts from a directory.
  - `help_logging()`: prints information on using the python `logging` module (which is used in this module).  
 &nbsp;
 
